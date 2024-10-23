@@ -44,3 +44,22 @@ resources:
       #       autoscale:
       #           min_workers: 1
       #           max_workers: 4
+
+      queue:
+        enabled: true
+
+      parameters:
+        - name: bundle.workspace.file_path
+          default: ${workspace.file_path}
+        - name: bundle.target
+          default: ${bundle.target}
+        - name: delimitedForEach.catalog
+          default: healthverity_claims_sample_patient_dataset
+        - name: delimitedForEach.schema
+          default: hv_claims_sample
+        - name: delimitedForEach.table
+          default: procedure
+        - name: delimitedForEach.maxRowsPerFile
+          default: 1000
+        - name: delimitedForEach.extractVolumePath
+          default: /Volumes/mgiglia/main/extract/delimitedForEach/
