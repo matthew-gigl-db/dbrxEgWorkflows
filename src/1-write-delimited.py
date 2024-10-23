@@ -4,9 +4,9 @@ dbutils.widgets.text("delimitedForEach.schema", "hv_claims_sample")
 dbutils.widgets.text("delimitedForEach.table", "procedure")
 dbutils.widgets.text("delimitedForEach.maxRowsPerFile", "1000")
 dbutils.widgets.text("delimitedForEach.extractVolumePath", "/Volumes/mgiglia/main/extract/delimitedForEach/")
-dbutils.widgets.text("delimitedForEach.start", "0")
-dbutils.widgets.text("delimitedForEach.stop", "1000")
-dbutils.widgets.text("delimitedForEach.file_num", "0")
+dbutils.widgets.text("delimitedForEach.start")
+dbutils.widgets.text("delimitedForEach.stop")
+dbutils.widgets.text("delimitedForEach.file_num")
 
 # COMMAND ----------
 

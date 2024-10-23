@@ -32,9 +32,9 @@ resources:
               notebook_task:
                 notebook_path: ../src/1-write-delimited.py
                 base_parameters:
-                  record_start: "{{input.start}}"
-                  record_stop: "{{input.stop}}"
-                  file_num: "{{input.file_num}}"
+                  delimitedForEach.start: "{{input.start}}"
+                  delimitedForEach.stop: "{{input.stop}}"
+                  delimitedForEach.file_num: "{{input.file_num}}"
         
       # job_clusters:
       #   - job_cluster_key: job_cluster
@@ -60,6 +60,6 @@ resources:
         - name: delimitedForEach.table
           default: procedure
         - name: delimitedForEach.maxRowsPerFile
-          default: 1000
+          default: 10000
         - name: delimitedForEach.extractVolumePath
           default: /Volumes/mgiglia/main/extract/delimitedForEach/
