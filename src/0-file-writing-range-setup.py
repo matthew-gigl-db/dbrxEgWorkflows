@@ -38,9 +38,6 @@ file_num = 1
 
 while start < row_count:
     ranges.append({
-        "catalog": catalog_use,
-        "schema": schema_use,
-        "table": table_use,
         "start": start,
         "stop": min(stop, row_count),
         "file_num": file_num
