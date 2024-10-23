@@ -48,7 +48,7 @@ df = df.withColumn(
 
 # COMMAND ----------
 
-display(df)
+# display(df)
 
 # COMMAND ----------
 

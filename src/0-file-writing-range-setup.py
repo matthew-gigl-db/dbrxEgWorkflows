@@ -50,7 +50,7 @@ ranges
 
 # COMMAND ----------
 
-display(df)
+# display(df)
 
 # COMMAND ----------
 
