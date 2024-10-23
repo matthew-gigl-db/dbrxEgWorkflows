@@ -15,10 +15,26 @@ resources:
           - matthew.giglia@databricks.com
 
       tasks:
-        - task_key: notebook_task
+        - task_key: 0_file_write_range_setup
+          description: Sets up the ranges of records that will be written to CSV files.  
           # job_cluster_key: job_cluster
           notebook_task:
-            notebook_path: ../src/notebook.py
+            notebook_path: ../src/0-file-writing-range-setup.py
+        - task_key: 1_file_writes
+          description: Write the CSV Files concurrently to a volume.  
+          depends_on:
+            - task_key: 0_file_write_range_setup
+          for_each_task:
+            inputs: "{{tasks.[available_hv_data].values.[hv_tables]}}"
+            concurrency: 25
+            task:
+              task_key: 1_file_writes_iteration
+              notebook_task:
+                notebook_path: ../src/1-write-delimited.py
+                base_parameters:
+                  record_start: "{{input.start}}"
+                  record_stop: "{{input.stop}}"
+                  file_num: "{{input.file_num}}"
         
       # job_clusters:
       #   - job_cluster_key: job_cluster
