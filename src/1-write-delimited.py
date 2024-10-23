@@ -1,4 +1,5 @@
 # Databricks notebook source
+# DBTITLE 1,Set Input Parameters
 dbutils.widgets.text("delimitedForEach.catalog", "healthverity_claims_sample_patient_dataset")
 dbutils.widgets.text("delimitedForEach.schema", "hv_claims_sample")
 dbutils.widgets.text("delimitedForEach.table", "procedure")
@@ -10,17 +11,19 @@ dbutils.widgets.text("delimitedForEach.file_num", "0")
 
 # COMMAND ----------
 
+# DBTITLE 1,Retrieve Input Parameters
 catalog_use = dbutils.widgets.get("delimitedForEach.catalog")
 schema_use = dbutils.widgets.get("delimitedForEach.schema")
 table_use = dbutils.widgets.get("delimitedForEach.table")
-max_rows_per_file = int(dbutils.widgets.get("delimitedForEach.maxRowsPerFile"))
+max_rows_per_file = int(float(dbutils.widgets.get("delimitedForEach.maxRowsPerFile")))
 extract_path = dbutils.widgets.get("delimitedForEach.extractVolumePath")
-record_start = int(dbutils.widgets.get("delimitedForEach.start"))
-record_stop = int(dbutils.widgets.get("delimitedForEach.stop"))
-file_num = int(dbutils.widgets.get("delimitedForEach.file_num"))
+record_start = int(float(dbutils.widgets.get("delimitedForEach.start")))
+record_stop = int(float(dbutils.widgets.get("delimitedForEach.stop")))
+file_num = int(float(dbutils.widgets.get("delimitedForEach.file_num")))
 
 # COMMAND ----------
 
+# DBTITLE 1,Print Input Parameters
 print(f"""
    catalog_use: {catalog_use}
    schema_use: {schema_use}
@@ -34,6 +37,7 @@ print(f"""
 
 # COMMAND ----------
 
+# DBTITLE 1,Query Dataframe for Records
 from pyspark.sql import functions as F
 from pyspark.sql.window import Window
 

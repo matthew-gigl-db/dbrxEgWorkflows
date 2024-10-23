@@ -2,7 +2,7 @@
 dbutils.widgets.text("delimitedForEach.catalog", "healthverity_claims_sample_patient_dataset")
 dbutils.widgets.text("delimitedForEach.schema", "hv_claims_sample")
 dbutils.widgets.text("delimitedForEach.table", "procedure")
-dbutils.widgets.text("delimitedForEach.maxRowsPerFile", "1000")
+dbutils.widgets.text("delimitedForEach.maxRowsPerFile", "10000")
 dbutils.widgets.text("delimitedForEach.extractVolumePath", "/Volumes/mgiglia/main/extract/delimitedForEach/")
 
 # COMMAND ----------
@@ -10,7 +10,7 @@ dbutils.widgets.text("delimitedForEach.extractVolumePath", "/Volumes/mgiglia/mai
 catalog_use = dbutils.widgets.get("delimitedForEach.catalog")
 schema_use = dbutils.widgets.get("delimitedForEach.schema")
 table_use = dbutils.widgets.get("delimitedForEach.table")
-max_rows_per_file = int(dbutils.widgets.get("delimitedForEach.maxRowsPerFile"))
+max_rows_per_file = int(float(dbutils.widgets.get("delimitedForEach.maxRowsPerFile")))
 extract_path = dbutils.widgets.get("delimitedForEach.extractVolumePath")
 
 # COMMAND ----------
