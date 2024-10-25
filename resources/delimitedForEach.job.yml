@@ -63,3 +63,6 @@ resources:
           default: 10000
         - name: delimitedForEach.extractVolumePath
           default: /Volumes/mgiglia/main/extract/delimitedForEach/
+        - name: delimitedForEach.include_header
+          default: false
+
