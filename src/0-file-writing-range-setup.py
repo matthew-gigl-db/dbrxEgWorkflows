@@ -37,11 +37,11 @@
 # COMMAND ----------
 
 # DBTITLE 1,Set Up Notebook Input Parameters
-dbutils.widgets.text("delimitedForEach.catalog", "healthverity_claims_sample_patient_dataset")
-dbutils.widgets.text("delimitedForEach.schema", "hv_claims_sample")
-dbutils.widgets.text("delimitedForEach.table", "procedure")
-dbutils.widgets.text("delimitedForEach.maxRowsPerFile", "10000")
-dbutils.widgets.text("delimitedForEach.extractVolumePath", "/Volumes/mgiglia/main/extract/delimitedForEach/")
+dbutils.widgets.text("delimitedForEach.catalog", "healthverity_claims_sample_patient_dataset", "Catalog")
+dbutils.widgets.text("delimitedForEach.schema", "hv_claims_sample", "Schema")
+dbutils.widgets.text("delimitedForEach.table", "procedure", "Table")
+dbutils.widgets.text("delimitedForEach.maxRowsPerFile", "10000", "Max Rows Per File")
+dbutils.widgets.text("delimitedForEach.extractVolumePath", "/Volumes/mgiglia/main/extract/delimitedForEach/", "Extract Volume")
 
 # COMMAND ----------
 
