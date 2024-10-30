@@ -26,6 +26,7 @@ dbutils.widgets.text("delimitedForEach.start", "0", "Starting Row")
 dbutils.widgets.text("delimitedForEach.stop", "10000", "Stopping Row")
 dbutils.widgets.text("delimitedForEach.file_num", "0", "File Number")
 dbutils.widgets.text("delimitedForEach.include_header", "false", "Include Header for All Files")
+dbutils.widgets.text("delimitedForEach.timezone", "EST", "Timezone for File Creation Timestamp")
 
 # COMMAND ----------
 
@@ -39,6 +40,7 @@ record_start = int(float(dbutils.widgets.get("delimitedForEach.start")))
 record_stop = int(float(dbutils.widgets.get("delimitedForEach.stop")))
 file_num = int(float(dbutils.widgets.get("delimitedForEach.file_num")))
 include_header_all = dbutils.widgets.get("delimitedForEach.include_header").lower() == 'true'
+timezone_for_files = dbutils.widgets.get("delimitedForEach.timezone")
 
 # COMMAND ----------
 
@@ -94,6 +96,15 @@ if optional_display_df:
 
 # COMMAND ----------
 
+# DBTITLE 1,Create the Date Time Stamp  for the File Creation Based on the Timezone Input Parameter
+from datetime import datetime
+import pytz
+
+current_datetime_str = datetime.now(tz=pytz.timezone(timezone_for_files)).strftime("%Y%m%d%H%M%S")
+current_datetime_str
+
+# COMMAND ----------
+
 # DBTITLE 1,Write the CSV Files
 if file_num == 0:
   (
@@ -101,7 +112,7 @@ if file_num == 0:
     .coalesce(1)
     .write
     .mode("overwrite")
-    .csv(f"{extract_path}/{file_num}", header=True)
+    .csv(f"{extract_path}/{current_datetime_str}/{file_num}", header=True)
   )
 else:
   (
@@ -109,5 +120,5 @@ else:
     .coalesce(1)
     .write
     .mode("overwrite")
-    .csv(f"{extract_path}/{file_num}", header=include_header_all)
+    .csv(f"{extract_path}/{current_datetime_str}/{file_num}", header=include_header_all)
   )

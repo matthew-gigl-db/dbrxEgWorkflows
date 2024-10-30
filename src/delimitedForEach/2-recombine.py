@@ -1,0 +1,10 @@
+# Databricks notebook source
+dbutils.widgets.text("delimitedForEach.catalog", "healthverity_claims_sample_patient_dataset", "Catalog")
+dbutils.widgets.text("delimitedForEach.schema", "hv_claims_sample", "Schema")
+dbutils.widgets.text("delimitedForEach.table", "procedure", "Table")
+dbutils.widgets.text("delimitedForEach.maxRowsPerFile", "10000", "Max Rows Per File")
+dbutils.widgets.text("delimitedForEach.extractVolumePath", "/Volumes/mgiglia/main/extract/delimitedForEach/", "Extract Volume Path")
+dbutils.widgets.text("delimitedForEach.start", "0", "Starting Row")
+dbutils.widgets.text("delimitedForEach.stop", "10000", "Stopping Row")
+dbutils.widgets.text("delimitedForEach.file_num", "0", "File Number")
+dbutils.widgets.text("delimitedForEach.include_header", "false", "Include Header for All Files")

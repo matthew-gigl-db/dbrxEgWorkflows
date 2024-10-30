@@ -65,4 +65,6 @@ resources:
           default: /Volumes/mgiglia/main/extract/delimitedForEach/
         - name: delimitedForEach.include_header
           default: false
+        - name: delimitedForEach.timezone
+          default: EST
 
