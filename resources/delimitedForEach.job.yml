@@ -39,8 +39,15 @@ resources:
           description: Write the CSV Files concurrently to a volume.  
           depends_on:
             - task_key: 1_file_writes
-          notebook_task:
-            notebook_path: ../src/delimitedForEach/2-move-and-rename.py
+          for_each_task:
+            inputs: "{{tasks.[0_file_write_range_setup].values.[ranges]}}"
+            concurrency: 25
+            task:
+              task_key: 2_move_and_rename_iteration
+              notebook_task:
+                notebook_path: ../src/delimitedForEach/2-move-and-rename.py
+                base_parameters:
+                  delimitedForEach.file_num: "{{input.file_num}}"
         
       # job_clusters:
       #   - job_cluster_key: job_cluster
@@ -73,4 +80,8 @@ resources:
           default: false
         - name: delimitedForEach.timezone
           default: EST
+        - name: delimitedForEach.file_name_prefix
+          default: hedis
+        - name: delimitedForEach.remove_directories
+          default: true
 
