@@ -42,6 +42,7 @@ dbutils.widgets.text("delimitedForEach.schema", "hv_claims_sample", "Schema")
 dbutils.widgets.text("delimitedForEach.table", "procedure", "Table")
 dbutils.widgets.text("delimitedForEach.maxRowsPerFile", "10000", "Max Rows Per File")
 dbutils.widgets.text("delimitedForEach.extractVolumePath", "/Volumes/mgiglia/main/extract/delimitedForEach/", "Extract Volume")
+dbutils.widgets.text("delimitedForEach.timezone", "EST", "Timezone for File Creation Timestamp")
 
 # COMMAND ----------
 
@@ -51,6 +52,7 @@ schema_use = dbutils.widgets.get("delimitedForEach.schema")
 table_use = dbutils.widgets.get("delimitedForEach.table")
 max_rows_per_file = int(float(dbutils.widgets.get("delimitedForEach.maxRowsPerFile")))
 extract_path = dbutils.widgets.get("delimitedForEach.extractVolumePath")
+timezone_for_files = dbutils.widgets.get("delimitedForEach.timezone")
 
 # COMMAND ----------
 
@@ -61,7 +63,25 @@ print(f"""
    table_use: {table_use}
    max_rows_per_file: {max_rows_per_file}   
    extract_path: {extract_path}
+   timezone_for_files: {timezone_for_files}
 """)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ***
+# MAGIC ### Datetime Folder for File Writes 
+# MAGIC
+# MAGIC The files will be written to a subfolder of the extract volume `delimitedForEach/{current_datetime_str}` where the `{current_datetime_str}` takes the form of YYYYMMDDHHMMSS based on the inputted file timezone.  
+
+# COMMAND ----------
+
+# DBTITLE 1,Create the Date Time Stamp  for the File Creation Based on the Timezone Input Parameter
+from datetime import datetime
+import pytz
+
+current_datetime_str = datetime.now(tz=pytz.timezone(timezone_for_files)).strftime("%Y%m%d%H%M%S")
+current_datetime_str
 
 # COMMAND ----------
 
@@ -160,6 +180,11 @@ if run_optional_step:
 # MAGIC ### Set TaskValues to Pass Variable Information Between Tasks in a Workflow
 # MAGIC
 # MAGIC This is where the real magic happens.  We pass the "ranges" array of dictionaries to the forEach iterator's input by using taskValues at the end of this notebook.  Note that you can set many taskValues in a single notebook just like you might set many input parameters.  TaskValues are also retrievable in a notebook using the `dbutils.jobs.taskValues.get(...)` method.  
+
+# COMMAND ----------
+
+# DBTITLE 1,Pass the current_datetime_str to TaskValues for Use in the ForEach Iterator and Recombine Tasks
+dbutils.jobs.taskValues.set("current_datetime_str", current_datetime_str)
 
 # COMMAND ----------
 

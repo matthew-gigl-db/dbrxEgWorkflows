@@ -19,7 +19,7 @@ resources:
           description: Sets up the ranges of records that will be written to CSV files.  
           # job_cluster_key: job_cluster
           notebook_task:
-            notebook_path: ../src/0-file-writing-range-setup.py
+            notebook_path: ../src/delimitedForEach/0-file-writing-range-setup.py
         - task_key: 1_file_writes
           description: Write the CSV Files concurrently to a volume.  
           depends_on:
@@ -30,11 +30,17 @@ resources:
             task:
               task_key: 1_file_writes_iteration
               notebook_task:
-                notebook_path: ../src/1-write-delimited.py
+                notebook_path: ../src/delimitedForEach/1-write-delimited.py
                 base_parameters:
                   delimitedForEach.start: "{{input.start}}"
                   delimitedForEach.stop: "{{input.stop}}"
                   delimitedForEach.file_num: "{{input.file_num}}"
+        - task_key: 2_move_and_rename
+          description: Write the CSV Files concurrently to a volume.  
+          depends_on:
+            - task_key: 1_file_writes
+          notebook_task:
+            notebook_path: ../src/delimitedForEach/2-move-and-rename.py
         
       # job_clusters:
       #   - job_cluster_key: job_cluster
@@ -65,4 +71,6 @@ resources:
           default: /Volumes/mgiglia/main/extract/delimitedForEach/
         - name: delimitedForEach.include_header
           default: false
+        - name: delimitedForEach.timezone
+          default: EST
 

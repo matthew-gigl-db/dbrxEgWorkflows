@@ -42,6 +42,15 @@ include_header_all = dbutils.widgets.get("delimitedForEach.include_header").lowe
 
 # COMMAND ----------
 
+# DBTITLE 1,Retrieve taskValues
+current_datetime_str = dbutils.jobs.taskValues.get(
+    taskKey="0_file_write_range_setup", 
+    key="current_datetime_str", 
+    debugValue="20241031115959"
+)
+
+# COMMAND ----------
+
 # DBTITLE 1,Print Input Parameters
 print(f"""
    catalog_use: {catalog_use}
@@ -53,6 +62,7 @@ print(f"""
    record_stop: {record_stop}
    file_num: {file_num}
    include_header_all: {include_header_all}
+   current_datetime_str: {current_datetime_str}
 """)
 
 # COMMAND ----------
@@ -101,7 +111,7 @@ if file_num == 0:
     .coalesce(1)
     .write
     .mode("overwrite")
-    .csv(f"{extract_path}/{file_num}", header=True)
+    .csv(f"{extract_path}/{current_datetime_str}/{file_num}", header=True)
   )
 else:
   (
@@ -109,5 +119,5 @@ else:
     .coalesce(1)
     .write
     .mode("overwrite")
-    .csv(f"{extract_path}/{file_num}", header=include_header_all)
+    .csv(f"{extract_path}/{current_datetime_str}/{file_num}", header=include_header_all)
   )
