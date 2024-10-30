@@ -83,5 +83,5 @@ resources:
         - name: delimitedForEach.file_name_prefix
           default: hedis
         - name: delimitedForEach.remove_directories
-          default: True
+          default: true
 

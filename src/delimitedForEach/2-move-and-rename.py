@@ -20,7 +20,7 @@
 dbutils.widgets.text("delimitedForEach.extractVolumePath", "/Volumes/mgiglia/main/extract/delimitedForEach/", "Extract Volume Path")
 dbutils.widgets.text("delimitedForEach.file_num", "0", "File Number")
 dbutils.widgets.text("delimitedForEach.file_name_prefix", "hedis", "File Name Prefix")
-dbutils.widgets.text("delimitedForEach.remove_directories", "True", "Remove Directories")
+dbutils.widgets.text("delimitedForEach.remove_directories", "true", "Remove Directories")
 
 # COMMAND ----------
 
@@ -28,7 +28,7 @@ dbutils.widgets.text("delimitedForEach.remove_directories", "True", "Remove Dire
 extract_path = dbutils.widgets.get("delimitedForEach.extractVolumePath")
 file_num = int(float(dbutils.widgets.get("delimitedForEach.file_num")))
 file_name_prefix = dbutils.widgets.get("delimitedForEach.file_name_prefix")
-remove_directories = dbutils.widgets.get("delimitedForEach.remove_directories") == "True"
+remove_directories = dbutils.widgets.get("delimitedForEach.remove_directories") == "true"
 
 # COMMAND ----------
 
@@ -36,7 +36,7 @@ remove_directories = dbutils.widgets.get("delimitedForEach.remove_directories") 
 current_datetime_str = dbutils.jobs.taskValues.get(
     taskKey="0_file_write_range_setup", 
     key="current_datetime_str", 
-    debugValue="20241030022002"
+    debugValue="20241030030404"
 )
 
 # COMMAND ----------
@@ -95,7 +95,7 @@ list_csv_command = f"find {directory_path} -type f -name '*.csv'"
 csv_files = subprocess.run(list_csv_command, shell=True, capture_output=True, text=True).stdout.splitlines()
 
 # Move and rename each CSV file
-for file_num, csv_file in enumerate(csv_files, start=1):
+for ref, csv_file in enumerate(csv_files):
     new_file_name = f"{file_name_prefix}_{current_datetime_str}_{file_num}.csv"
     move_command = f"cp -f {csv_file} {directory_path}/../{new_file_name}"
     subprocess.run(move_command, shell=True)
