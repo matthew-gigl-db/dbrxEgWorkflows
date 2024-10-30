@@ -20,17 +20,13 @@
 
 # DBTITLE 1,Set Notebook Input Parameters
 dbutils.widgets.text("delimitedForEach.extractVolumePath", "/Volumes/mgiglia/main/extract/delimitedForEach/", "Extract Volume Path")
-dbutils.widgets.text("delimitedForEach.file_num", "0", "File Number")
 dbutils.widgets.text("delimitedForEach.file_name_prefix", "hedis", "File Name Prefix")
-dbutils.widgets.text("delimitedForEach.remove_directories", "true", "Remove Directories")
 
 # COMMAND ----------
 
 # DBTITLE 1,Retrieve Notebook Input Parameters
 extract_path = dbutils.widgets.get("delimitedForEach.extractVolumePath")
-file_num = int(float(dbutils.widgets.get("delimitedForEach.file_num")))
 file_name_prefix = dbutils.widgets.get("delimitedForEach.file_name_prefix")
-remove_directories = dbutils.widgets.get("delimitedForEach.remove_directories") == "true"
 
 # COMMAND ----------
 
@@ -38,16 +34,36 @@ remove_directories = dbutils.widgets.get("delimitedForEach.remove_directories") 
 current_datetime_str = dbutils.jobs.taskValues.get(
     taskKey="0_file_write_range_setup", 
     key="current_datetime_str", 
-    debugValue="20241030030404"
+    debugValue="20241030032724"
 )
+
+ranges = dbutils.jobs.taskValues.get(
+    taskKey="0_file_write_range_setup", 
+    key="ranges", 
+    debugValue=[{"start": 0, "stop": 10000, "file_num": 0}, {"start": 0, "stop": 10000, "file_num": 40}]
+)
+
+max_file_num = max(range["file_num"] for range in ranges)
 
 # COMMAND ----------
 
 # DBTITLE 1,Print Inputs
 print(f"""
-   extract_path: {extract_path}
-   file_num: {file_num}
-   current_datetime_str: {current_datetime_str}   
+   extract_path: {extract_path}  
    file_name_prefix: {file_name_prefix}
-   remove_directories: {remove_directories}
+   max_file_num: {max_file_num}
 """)
+
+# COMMAND ----------
+
+directory_path = f"{extract_path}/{current_datetime_str}"
+directory_path
+
+# COMMAND ----------
+
+combined_file_path = f"{directory_path}/{file_name_prefix}_{current_datetime_str}.csv"
+with open(combined_file_path, 'wb') as outfile:
+    for i in range(max_file_num + 1):
+        file_path = f"{directory_path}/{file_name_prefix}_{i}.csv"
+        with open(file_path, 'rb') as infile:
+            outfile.write(infile.read())
