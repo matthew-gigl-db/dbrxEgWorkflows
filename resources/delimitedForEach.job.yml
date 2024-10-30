@@ -28,7 +28,7 @@ resources:
             inputs: "{{tasks.[0_file_write_range_setup].values.[ranges]}}"
             concurrency: 25
             task:
-              task_key: file_writes_iteration
+              task_key: 1_file_writes_iteration
               notebook_task:
                 notebook_path: ../src/delimitedForEach/1-write-delimited.py
                 base_parameters:
