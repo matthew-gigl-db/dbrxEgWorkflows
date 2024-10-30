@@ -44,7 +44,7 @@ include_header_all = dbutils.widgets.get("delimitedForEach.include_header").lowe
 
 # DBTITLE 1,Retrieve taskValues
 current_datetime_str = dbutils.jobs.taskValues.get(
-    taskKey="file_write_range_setup", 
+    taskKey="0_file_write_range_setup", 
     key="current_datetime_str", 
     debugValue="20241031115959"
 )

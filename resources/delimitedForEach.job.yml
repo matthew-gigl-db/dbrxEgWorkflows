@@ -15,17 +15,17 @@ resources:
           - matthew.giglia@databricks.com
 
       tasks:
-        - task_key: file_write_range_setup
+        - task_key: 0_file_write_range_setup
           description: Sets up the ranges of records that will be written to CSV files.  
           # job_cluster_key: job_cluster
           notebook_task:
             notebook_path: ../src/delimitedForEach/0-file-writing-range-setup.py
-        - task_key: file_writes
+        - task_key: 1_file_writes
           description: Write the CSV Files concurrently to a volume.  
           depends_on:
-            - task_key: file_write_range_setup
+            - task_key: 0_file_write_range_setup
           for_each_task:
-            inputs: "{{tasks.[file_write_range_setup].values.[ranges]}}"
+            inputs: "{{tasks.[0_file_write_range_setup].values.[ranges]}}"
             concurrency: 25
             task:
               task_key: file_writes_iteration
@@ -35,10 +35,10 @@ resources:
                   delimitedForEach.start: "{{input.start}}"
                   delimitedForEach.stop: "{{input.stop}}"
                   delimitedForEach.file_num: "{{input.file_num}}"
-        - task_key: move_and_rename
+        - task_key: 2_move_and_rename
           description: Write the CSV Files concurrently to a volume.  
           depends_on:
-            - task_key: file_write_range_setup
+            - task_key: 1_file_writes
           notebook_task:
             notebook_path: ../src/delimitedForEach/2-move-and-rename.py
         
