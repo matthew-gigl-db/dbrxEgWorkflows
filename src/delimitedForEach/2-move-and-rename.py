@@ -94,11 +94,16 @@ print(ls_result.stdout.decode("utf-8") + "\n" + ls_result.stderr.decode("utf-8")
 list_csv_command = f"find {directory_path} -type f -name '*.csv'"
 csv_files = subprocess.run(list_csv_command, shell=True, capture_output=True, text=True).stdout.splitlines()
 
-# Move and rename each CSV file
-for ref, csv_file in enumerate(csv_files):
-    new_file_name = f"{file_name_prefix}_{current_datetime_str}_{file_num}.csv"
-    move_command = f"cp -f {csv_file} {directory_path}/../{new_file_name}"
-    subprocess.run(move_command, shell=True)
+if len(csv_files) > 1:
+  # Move and rename each CSV file
+  for ref, csv_file in enumerate(csv_files):
+      new_file_name = f"{file_name_prefix}_{current_datetime_str}_{file_num}_{ref}.csv"
+      move_command = f"cp -f {csv_file} {directory_path}/../{new_file_name}"
+      subprocess.run(move_command, shell=True)
+else:
+  new_file_name = f"{file_name_prefix}_{current_datetime_str}_{file_num}.csv"
+  move_command = f"cp -f {csv_files[0]} {directory_path}/../{new_file_name}"
+  subprocess.run(move_command, shell=True)
 
 # COMMAND ----------
 
