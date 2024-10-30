@@ -1,4 +1,21 @@
 # Databricks notebook source
+# MAGIC %md
+# MAGIC # delimitedForEach
+# MAGIC
+# MAGIC *** 
+# MAGIC ## Move and Rename Files
+# MAGIC
+# MAGIC The purpose of this notebook is to reach into each subdirectory and identify the written CSV file, copy it the parent directory `delimitedForEach/{current_datetime_str}` and rename the file based on the `file_name_prefix` the `current_datetime_str` and the `file_num`.     
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ***
+# MAGIC
+# MAGIC ### Notebook Setup
+
+# COMMAND ----------
+
 # DBTITLE 1,Set Notebook Input Parameters
 dbutils.widgets.text("delimitedForEach.extractVolumePath", "/Volumes/mgiglia/main/extract/delimitedForEach/", "Extract Volume Path")
 dbutils.widgets.text("delimitedForEach.file_num", "0", "File Number")
@@ -32,6 +49,13 @@ print(f"""
    file_name_prefix: {file_name_prefix}
    remove_directories: {remove_directories}
 """)
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ***
+# MAGIC
+# MAGIC ### Copy and Rename Delimited Files
 
 # COMMAND ----------
 
@@ -81,6 +105,15 @@ for file_num, csv_file in enumerate(csv_files, start=1):
 # DBTITLE 1,List Delimited Files in the Parent Directory
 ls_result = subprocess.run(f"find {directory_path}/../ -maxdepth 1 -type f", shell=True, capture_output=True)
 print(ls_result.stdout.decode("utf-8") + "\n" + ls_result.stderr.decode("utf-8"))
+
+# COMMAND ----------
+
+# MAGIC %md
+# MAGIC ***
+# MAGIC
+# MAGIC ### Clean Up 
+# MAGIC
+# MAGIC Optionally remove extraneous files and directories from the volume.  
 
 # COMMAND ----------
 

@@ -5,7 +5,7 @@
 # MAGIC *** 
 # MAGIC ## Write CSV File 
 # MAGIC
-# MAGIC The purpose of this notebook it to query and filter and table in Unity Catalog to prepare and then write its data to a single CSV file based on the input parameters.  
+# MAGIC The purpose of this notebook is to query and filter and table in Unity Catalog to prepare and then write its data to a single CSV file based on the input parameters.  
 
 # COMMAND ----------
 
