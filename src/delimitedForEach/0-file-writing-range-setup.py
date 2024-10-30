@@ -104,7 +104,7 @@ row_count
 ranges = []
 start = 0
 stop = max_rows_per_file
-file_num = 1
+file_num = 0
 
 while start < row_count:
     ranges.append({
