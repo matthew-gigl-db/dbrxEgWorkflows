@@ -122,3 +122,7 @@ else:
     .mode("overwrite")
     .csv(f"{extract_path}/{current_datetime_str}/{file_num}", header=include_header_all)
   )
+
+# COMMAND ----------
+
+dbutils.jobs.taskValues.set("current_datetime_str", current_datetime_str")
