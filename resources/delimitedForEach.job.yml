@@ -35,6 +35,12 @@ resources:
                   delimitedForEach.start: "{{input.start}}"
                   delimitedForEach.stop: "{{input.stop}}"
                   delimitedForEach.file_num: "{{input.file_num}}"
+        - task_key: move_and_rename
+          description: Write the CSV Files concurrently to a volume.  
+          depends_on:
+            - task_key: file_write_range_setup
+          notebook_task:
+            notebook_path: ../src/delimitedForEach/2-move-and-rename.py
         
       # job_clusters:
       #   - job_cluster_key: job_cluster
