@@ -30,9 +30,9 @@ directory_path
 
 # COMMAND ----------
 
-import subprocess
+import subprocess 
 
-subprocess.run(f"ls -R {directory_path}", shell=True)
+subprocess.run(f"ls -R {directory_path}", shell=True, capture_output=True)
 
 # COMMAND ----------
 
@@ -40,5 +40,9 @@ subprocess.run(f"ls -R {directory_path}", shell=True)
 command = f"find {directory_path} -type f ! -name '*.csv' -delete"
 
 # Execute the command
-delete_result = subprocess.run(command, shell=True, check=True)
-print(delete_result.stdout + "\n" + delete_result.stderr)
+delete_result = subprocess.run(command, shell=True, capture_output=True)
+print(delete_result.stdout.decode("utf-8") + "\n" + delete_result.stderr.decode("utf-8"))
+
+# COMMAND ----------
+
+subprocess.run(f"ls -R {directory_path}", shell=True, capture_output=True)
