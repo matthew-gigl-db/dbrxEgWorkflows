@@ -36,7 +36,7 @@ resources:
                   delimitedForEach.stop: "{{input.stop}}"
                   delimitedForEach.file_num: "{{input.file_num}}"
         - task_key: 2_move_and_rename
-          description: Write the CSV Files concurrently to a volume.  
+          description: Move the files up a directory based on the process run's datetime and rename based on a file prefix name.  
           depends_on:
             - task_key: 1_file_writes
           for_each_task:
@@ -48,6 +48,14 @@ resources:
                 notebook_path: ../src/delimitedForEach/2-move-and-rename.py
                 base_parameters:
                   delimitedForEach.file_num: "{{input.file_num}}"
+        - task_key: result_conditional
+          depends_on:
+            - task_key: 2_move_and_rename
+          condition_task:
+            op: EQUAL_TO
+            left: "{{job.parameters.delimitedForEach.include_header}}"
+            right: "false"
+          description: Ensure that only the first file (with file_num == 0) contains the header record.  If so, then its OK to combine the files.  
         
       # job_clusters:
       #   - job_cluster_key: job_cluster
