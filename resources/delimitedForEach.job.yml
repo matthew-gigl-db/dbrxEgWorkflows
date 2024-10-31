@@ -53,7 +53,7 @@ resources:
             - task_key: 2_move_and_rename
           condition_task:
             op: EQUAL_TO
-            left: "{{job.parameters.delimitedForEach.include_header}}"
+            left: "false"
             right: "false"
           description: Ensure that only the first file, with file_num == 0, contains the header record.  If so, then its OK to combine the files.  
         
