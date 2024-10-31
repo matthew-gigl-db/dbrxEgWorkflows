@@ -56,6 +56,13 @@ resources:
             left: "{{job.parameters.`delimitedForEach.include_header`}}"
             right: "false"
           description: Ensure that only the first file, with file_num == 0, contains the header record.  If so, then its OK to combine the files.  
+        - task_key: 3_optionally_combine_files
+          depends_on:
+            - task_key: result_conditional
+              outcome: "true"
+          notebook_task:
+            notebook_path: ../src/delimitedForEach/3-optionally-combine-files.py
+
         
       # job_clusters:
       #   - job_cluster_key: job_cluster
