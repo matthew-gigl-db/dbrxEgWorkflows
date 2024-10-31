@@ -56,14 +56,33 @@ print(f"""
 
 # COMMAND ----------
 
-directory_path = f"{extract_path}/{current_datetime_str}"
+# MAGIC %md
+# MAGIC ***
+# MAGIC
+# MAGIC ### Combine CSV Files Into A Single File 
+# MAGIC
+# MAGIC Note that only file with `file_num == 0` contains the header record when global workflow paramter `delimitedForEach.include_header` is set to `False`.  
+
+# COMMAND ----------
+
+# DBTITLE 1,Set Directory Path Based on the Current Datetime String
+directory_path = f"{extract_path}{current_datetime_str}"
 directory_path
 
 # COMMAND ----------
 
+# DBTITLE 1,Combine the Sub Files into a Single File In Order
 combined_file_path = f"{directory_path}/{file_name_prefix}_{current_datetime_str}.csv"
 with open(combined_file_path, 'wb') as outfile:
     for i in range(max_file_num + 1):
-        file_path = f"{directory_path}/{file_name_prefix}_{i}.csv"
+        file_path = f"{directory_path}/{file_name_prefix}_{current_datetime_str}_{i}.csv"
         with open(file_path, 'rb') as infile:
             outfile.write(infile.read())
+
+# COMMAND ----------
+
+# DBTITLE 1,List the Files in the Directory
+import subprocess
+
+result = subprocess.run(f"ls -alt {directory_path}", shell=True, capture_output=True)
+print(result.stdout.decode('utf-8') + "\n" + result.stderr.decode('utf-8'))
