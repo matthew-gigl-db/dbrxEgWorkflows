@@ -55,7 +55,7 @@ resources:
             op: EQUAL_TO
             left: "{{job.parameters.delimitedForEach.include_header}}"
             right: "false"
-          description: Ensure that only the first file (with file_num == 0) contains the header record.  If so, then its OK to combine the files.  
+          description: Ensure that only the first file, with file_num == 0, contains the header record.  If so, then its OK to combine the files.  
         
       # job_clusters:
       #   - job_cluster_key: job_cluster
