@@ -15,63 +15,12 @@ resources:
           - matthew.giglia@databricks.com
 
       tasks:
-        - task_key: 0_file_write_range_setup
-          description: Sets up the ranges of records that will be written to CSV files.  
+        - task_key: available_system_tables
+          description: Determines which system tables are available in the Databricks System Catalog's Schema 
           # job_cluster_key: job_cluster
           notebook_task:
-            notebook_path: ../src/delimitedForEach/0-file-writing-range-setup.py
-        # - task_key: 1_file_writes
-        #   description: Write the CSV Files concurrently to a volume.  
-        #   depends_on:
-        #     - task_key: 0_file_write_range_setup
-        #   for_each_task:
-        #     inputs: "{{tasks.[0_file_write_range_setup].values.[ranges]}}"
-        #     concurrency: 25
-        #     task:
-        #       task_key: 1_file_writes_iteration
-        #       notebook_task:
-        #         notebook_path: ../src/delimitedForEach/1-write-delimited.py
-        #         base_parameters:
-        #           delimitedForEach.start: "{{input.start}}"
-        #           delimitedForEach.stop: "{{input.stop}}"
-        #           delimitedForEach.file_num: "{{input.file_num}}"
-        # - task_key: 2_move_and_rename
-        #   description: Move the files up a directory based on the process run's datetime and rename based on a file prefix name.  
-        #   depends_on:
-        #     - task_key: 1_file_writes
-        #   for_each_task:
-        #     inputs: "{{tasks.[0_file_write_range_setup].values.[ranges]}}"
-        #     concurrency: 25
-        #     task:
-        #       task_key: 2_move_and_rename_iteration
-        #       notebook_task:
-        #         notebook_path: ../src/delimitedForEach/2-move-and-rename.py
-        #         base_parameters:
-        #           delimitedForEach.file_num: "{{input.file_num}}"
-        # - task_key: result_conditional
-        #   depends_on:
-        #     - task_key: 2_move_and_rename
-        #   condition_task:
-        #     op: EQUAL_TO
-        #     left: "{{job.parameters.`delimitedForEach.include_header`}}"
-        #     right: "false"
-        #   description: Ensure that only the first file, with file_num == 0, contains the header record.  If so, then its OK to combine the files.  
-        # - task_key: 3_optionally_combine_files
-        #   depends_on:
-        #     - task_key: result_conditional
-        #       outcome: "true"
-        #   notebook_task:
-        #     notebook_path: ../src/delimitedForEach/3-optionally-combine-files.py
+            notebook_path: ../src/systemTableRefresh/0-available-system-tables.py
 
-        
-      # job_clusters:
-      #   - job_cluster_key: job_cluster
-      #     new_cluster:
-      #       spark_version: 15.4.x-scala2.12
-      #       node_type_id: i3.xlarge
-      #       autoscale:
-      #           min_workers: 1
-      #           max_workers: 4
 
       queue:
         enabled: true
@@ -81,22 +30,7 @@ resources:
           default: ${workspace.file_path}
         - name: bundle.target
           default: ${bundle.target}
-        # - name: delimitedForEach.catalog
-        #   default: healthverity_claims_sample_patient_dataset
-        # - name: delimitedForEach.schema
-        #   default: hv_claims_sample
-        # - name: delimitedForEach.table
-        #   default: procedure
-        # - name: delimitedForEach.maxRowsPerFile
-        #   default: 10000
-        # - name: delimitedForEach.extractVolumePath
-        #   default: /Volumes/mgiglia/main/extract/delimitedForEach/
-        # - name: delimitedForEach.include_header
-        #   default: false
-        # - name: delimitedForEach.timezone
-        #   default: EST
-        # - name: delimitedForEach.file_name_prefix
-        #   default: hedis
-        # - name: delimitedForEach.remove_directories
-        #   default: true
+        - name: systemTableRefresh.excluded_schemas
+          default: information_schema, __internal_logging, hms_to_uc_migration
+
 

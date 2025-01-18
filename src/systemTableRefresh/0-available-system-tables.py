@@ -1,7 +1,7 @@
 # Databricks notebook source
 # DBTITLE 1,Set Databricks Widget for System Catalog Schemas to Exclude from Materializing
 dbutils.widgets.text(
-    "excluded_schemas",
+    "systemTableRefresh.excluded_schemas",
     "information_schema, __internal_logging, hms_to_uc_migration",
     "Excluded System Schemas",
 )
@@ -15,7 +15,7 @@ dbutils.widgets.text(
 # MAGIC set variable excluded_schemas = (
 # MAGIC   SELECT "'" || CONCAT_WS("', '", COLLECT_LIST(trim(value))) || "'"
 # MAGIC   FROM (
-# MAGIC     SELECT explode(split(:excluded_schemas, ',')) AS value
+# MAGIC     SELECT explode(split(:`systemTableRefresh.excluded_schemas`, ',')) AS value
 # MAGIC   )
 # MAGIC );
 # MAGIC
