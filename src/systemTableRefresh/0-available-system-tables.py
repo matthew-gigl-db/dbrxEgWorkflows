@@ -8,19 +8,18 @@ dbutils.widgets.text(
 
 # COMMAND ----------
 
-# DBTITLE 1,Extract Values from Excluded Schemas
+# DBTITLE 1,Extract Values from Excluded Schemas and Collect Into a Comment Separated List of Strings
 # MAGIC %sql
 # MAGIC DECLARE OR REPLACE VARIABLE excluded_schemas STRING;
 # MAGIC
 # MAGIC set variable excluded_schemas = (
-# MAGIC   with excluded as (
-# MAGIC    select
-# MAGIC     trim(explode(split(:excluded_schemas, ','))) AS ex_schema
-# MAGIC )
-# MAGIC select "'" || CONCAT_WS("', '", COLLECT_LIST(TRIM(ex_schema))) || "'" from excluded
+# MAGIC   SELECT "'" || CONCAT_WS("', '", COLLECT_LIST(trim(value))) || "'"
+# MAGIC   FROM (
+# MAGIC     SELECT explode(split(:excluded_schemas, ',')) AS value
+# MAGIC   )
 # MAGIC );
 # MAGIC
-# MAGIC SELECT excluded_schemas;
+# MAGIC select excluded_schemas;
 
 # COMMAND ----------
 
@@ -39,21 +38,30 @@ dbutils.widgets.text(
 
 # DBTITLE 1,Select the table metadata of the System Catalog Tables
 # MAGIC %sql
-# MAGIC select
-# MAGIC   *
-# MAGIC from
-# MAGIC   tables
-# MAGIC where
-# MAGIC   table_catalog = 'system'
-# MAGIC   and table_schema not in (SELECT explode(trim(split(:excluded_schemas, ','))))
-# MAGIC order by
-# MAGIC   table_catalog
-# MAGIC   ,table_schema
-# MAGIC   ,table_name
-# MAGIC   ,table_type
-# MAGIC   ,data_source_format
-# MAGIC ;
+# MAGIC declare or replace variable sql_stmnt string;
 # MAGIC
+# MAGIC SET VARIABLE sql_stmnt = ("
+# MAGIC   select
+# MAGIC     *
+# MAGIC   from
+# MAGIC     tables
+# MAGIC   where
+# MAGIC     table_catalog = 'system'
+# MAGIC     and table_schema not in (" || excluded_schemas || ")
+# MAGIC   order by
+# MAGIC     table_catalog
+# MAGIC     ,table_schema
+# MAGIC     ,table_name
+# MAGIC     ,table_type
+# MAGIC     ,data_source_format
+# MAGIC ");
+# MAGIC
+# MAGIC select sql_stmnt;
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC EXECUTE IMMEDIATE sql_stmnt;
 
 # COMMAND ----------
 
