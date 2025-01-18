@@ -89,6 +89,7 @@ print(result.stdout.decode('utf-8') + "\n" + result.stderr.decode('utf-8'))
 
 # COMMAND ----------
 
+# DBTITLE 1,Example - Zipping All Files in a Directory
 import os
 import gzip
 import shutil
