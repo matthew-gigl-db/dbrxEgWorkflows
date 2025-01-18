@@ -81,15 +81,18 @@ available_system_tables
 
 # COMMAND ----------
 
+# DBTITLE 1,Example of Describe Extended Output
 # MAGIC %sql
 # MAGIC describe extended system.access.audit;
 
 # COMMAND ----------
 
+# DBTITLE 1,Import Spark SQL Functions
 from pyspark.sql.functions import col
 
 # COMMAND ----------
 
+# DBTITLE 1,Add Table Properties and Location to the List of Dictionaries
 for table in available_system_tables:
     query = f"""
     DESCRIBE EXTENDED {table['table_catalog']}.{table['table_schema']}.{table['table_name']}
@@ -111,4 +114,5 @@ available_system_tables
 
 # COMMAND ----------
 
+# DBTITLE 1,Set Available System Tables Task Values
 dbutils.jobs.taskValues.set("available_system_tables", available_system_tables)
