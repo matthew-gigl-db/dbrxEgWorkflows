@@ -86,3 +86,16 @@ import subprocess
 
 result = subprocess.run(f"ls -alt {directory_path}", shell=True, capture_output=True)
 print(result.stdout.decode('utf-8') + "\n" + result.stderr.decode('utf-8'))
+
+# COMMAND ----------
+
+import os
+import gzip
+import shutil
+
+for file_name in os.listdir(directory_path):
+    file_path = os.path.join(directory_path, file_name)
+    if os.path.isfile(file_path):
+        with open(file_path, 'rb') as f_in:
+            with gzip.open(f"{file_path}.gz", 'wb') as f_out:
+                shutil.copyfileobj(f_in, f_out)
